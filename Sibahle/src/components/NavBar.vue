@@ -1,36 +1,45 @@
 <script setup>
-import { RouterLink } from 'vue-router'
+const props = defineProps({
+  activeSection: {
+    type: String,
+    default: 'home',
+  },
+})
+
+const emit = defineEmits(['navigate'])
 
 const links = [
-  { to: '/', label: 'Home' },
-  { to: '/about', label: 'About' },
-  { to: '/projects', label: 'Projects' },
-  { to: '/experience', label: 'Experience & Education' },
-  { to: '/beyond', label: 'Beyond Code' },
-  { to: '/contact', label: 'Contact' },
+  { id: 'home', label: 'Home' },
+  { id: 'about', label: 'About' },
+  { id: 'projects', label: 'Projects' },
+  { id: 'technical-stack', label: 'Tech Stack' },
+  { id: 'experience', label: 'Experience' },  { id: 'certifications', label: 'Certifications' },  { id: 'beyond', label: 'Beyond Code' },
+  { id: 'contact', label: 'Contact' },
 ]
+
+function navigateTo(id) {
+  emit('navigate', id)
+}
 </script>
 
 <template>
   <header class="site-header">
     <div class="brand-block">
-      <RouterLink class="brand-mark" to="/">Sibahle</RouterLink>
+      <a class="brand-mark" href="#home" @click.prevent="navigateTo('home')">Sibahle</a>
       <p class="brand-copy">Full Stack Web Developer</p>
     </div>
 
     <nav class="site-nav" aria-label="Primary navigation">
-      <RouterLink
+      <a
         v-for="link in links"
-        :key="link.to"
-        :to="link.to"
+        :key="link.id"
+        :href="`#${link.id}`"
         class="nav-link"
+        :class="{ 'is-active': props.activeSection === link.id }"
+        @click.prevent="navigateTo(link.id)"
       >
         {{ link.label }}
-      </RouterLink>
+      </a>
     </nav>
-
-    <a class="button button-primary nav-cv" href="/Sibahle_Tyantsi_CV.pdf" download>
-      Download CV
-    </a>
   </header>
 </template>
